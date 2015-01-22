@@ -22,12 +22,12 @@ function loadData() {
     var img = '<img class="bgimg" src="'+ src +'">';
     $body.append(img);
 
-    //NYT AJAX request -- all query strings return the same 10 articles!? 
-    var nytURL = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?[q='+ street +'&sort=newest&api-key=333e2c831eb04c241b85f73f8a465bc5:1:70977291'
+    //NYT AJAX request 
+    var nytURL = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q='+ encodeURIComponent(city) +'&sort=newest&api-key=333e2c831eb04c241b85f73f8a465bc5:1:70977291';
 
     $.getJSON(nytURL, function (data) {
         console.log(nytURL);
-        $nytHeaderElem.text("New York Times Articles about " + address);
+        $nytHeaderElem.text("New York Times Articles related to " + address);
         articles = data.response.docs;
         for(var i = 0; i < articles.length; i++) {
             var article = articles[i];
