@@ -18,15 +18,21 @@ function loadData() {
     var address = street + ", " + city;
 
     $greeting.text("So, you want to live at " + address + "?");
+    
+
+
     var src = "https://maps.googleapis.com/maps/api/streetview?location=" + address +"&size=600x400";
-    var img = '<img class="bgimg" src="'+ src +'">';
-    $body.append(img);
+    $('.jumbotron').css({"background-image":"url('"+ src +"')", 'background-repeat': 'no-repeat', 'background-size' : 'cover'});
+
+
+
+
+
 
     //NYT AJAX request 
     var nytURL = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q='+ encodeURIComponent(city) +'&sort=newest&api-key=333e2c831eb04c241b85f73f8a465bc5:1:70977291';
-
+    
     $.getJSON(nytURL, function (data) {
-        console.log(nytURL);
         $nytHeaderElem.text("New York Times Articles related to " + address);
         articles = data.response.docs;
         for(var i = 0; i < articles.length; i++) {
@@ -37,6 +43,13 @@ function loadData() {
     .error(function(e) {
             $nytHeaderElem.text("Fiddlesticks! We couldn't load any articles about " + address + ".");
     }); 
+
+
+
+
+
+
+
 
     //Wikipedia AJAX request 
     var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=opensearch&search="+ encodeURIComponent(city) +"&callback=catchWikipedia";
@@ -49,14 +62,13 @@ function loadData() {
       dataType: "jsonp",
       // callback function for jsonp
       success: function(data){
-
+        $wikiElem.text("");
         var articleList = data[1]; // from the returned object, the parameter 1 is an array of articles.
-         console.log(articleList);
         for(var i = 0; i < articleList.length; i++){
-            console.log("in for loop");
+
             articleString = articleList[i];
             var url = 'http://en.wikipedia.org/wiki/' + articleString;
-             $('#wikipedia-links').append('<li>' + '<a href="' + url + '">'+ articleString +'</a></li>');
+             $wikiElem.append('<li class="link">' + '<a href="' + url + '">'+ articleString +'</a></li>');
         }
         clearTimeout(wikiRequestTimeout);
       }
@@ -66,6 +78,3 @@ function loadData() {
 };
 
 $('#form-container').submit(loadData);
-
-
-// loadData();
